@@ -1,6 +1,12 @@
 const fs = require("fs");
 const Discord = require("discord.js");
-const { prefix, token } = require("./config.json");
+const { prefix } = require("./config.json");
+
+const token = process.env['tokenkey']
+
+
+const keepAlive = require('./server.js');
+keepAlive();
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -16,23 +22,26 @@ for (const file of commandFiles) {
 
 client.once("ready", () => {
   console.log("VUSHbot has been activated!");
-  client.user.setActivity("o͜ﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞoооооооооооооo͜ﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞﱞoооооооооооооo͜", {
-    type: "LISTENING"
+
+ // const mySecret = process.env['tokenkey']
+
+  /*client.user.setActivity("discord.gg/vush", {
+    type: "PLAYING"
   });
-});
+});*/
 
 client.on("message", (message) => {
   if (
     !message.content.startsWith(prefix) ||
     message.author.bot ||
-    !message.guild
+    !message.guild || !message.member.hasPermission('MOVE_MEMBERS')
   )
     return;
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
-  
+
   if (!client.commands.has(command)) return;
-  console.log (message.author.tag + ': ' + message.content);
+  console.log(message.author.tag + ': ' + message.content);
 
   try {
     client.commands.get(command).execute(message, args);
@@ -53,8 +62,36 @@ client.on("message", (message) => {
     message.channel.send("естественно");
   }
 });
-
-
+// предложения реакции
+client.on("message", (message) => {
+  if (message.channel.id === "894637255971455096") {
+    message.react('949994541371506738');
+    message.react('949994541501521940');
+  }
+});
+//публикации реакции
+client.on("message", (message) => {
+  if (message.channel.id === "894646214778322964") {
+    message.react('949994541371506738');
+  }
+});
+});
+//публикации треды
+/*
+client.on("message", (message) => {
+  
+if (message.channel.id === "841227297600176139") {
+      const thread = await channel.threads.create({
+	name: 'новое предложение',
+	autoArchiveDuration: 60,
+	reason: 'новое предложение',
+        
+});
+  console.log(`Created thread: ${thread.name}`);
+  }
+});
+ */
+/*
 client.once("ready", () => {
   console.log("Ready!");
 });
@@ -65,9 +102,9 @@ client.once("reconnecting", () => {
 
 client.once("disconnect", () => {
   console.log("Disconnect!");
-});
-const guild = require 
-if (guild.available) console.log('guild is available');
+});*/
+/*const guild = require
+if (guild.available) console.log('guild is available');*/
 
 /*client.on("message", (message) => {
   if (message.content === "~upd") {
@@ -76,5 +113,5 @@ if (guild.available) console.log('guild is available');
     
   }
 });*/
- 
+
 client.login(token);
